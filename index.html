@@ -4,11 +4,13 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>학습도구어 카드</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%231D9E75'/%3E%3Crect x='7' y='8' width='12' height='16' rx='2' fill='white'/%3E%3Crect x='7' y='8' width='4' height='16' rx='2' fill='%230F6E56'/%3E%3Crect x='11' y='12' width='6' height='1.5' rx='1' fill='%231D9E75'/%3E%3Crect x='11' y='15' width='5' height='1.5' rx='1' fill='%231D9E75'/%3E%3Crect x='11' y='18' width='4' height='1.5' rx='1' fill='%231D9E75'/%3E%3Ccircle cx='22' cy='22' r='7' fill='%23085041'/%3E%3Ctext x='22' y='26' text-anchor='middle' font-size='9' font-weight='bold' fill='white' font-family='sans-serif'%3E가%3C/text%3E%3C/svg%3E">
 <style>
 *{box-sizing:border-box;margin:0;padding:0;}
 body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Apple SD Gothic Neo',sans-serif;background:#f5f5f3;min-height:100vh;display:flex;align-items:flex-start;justify-content:center;padding:2rem 1rem;}
-.wrap{width:100%;max-width:480px;}
-.panel{background:#fff;border-radius:16px;border:1px solid rgba(0,0,0,0.08);padding:1.5rem;box-shadow:0 2px 12px rgba(0,0,0,0.06);}
+.wrap{width:100%;max-width:720px;}
+.panel{background:#fff;border-radius:16px;border:1px solid rgba(0,0,0,0.08);padding:2rem;box-shadow:0 2px 12px rgba(0,0,0,0.06);}
+@media(max-width:600px){.panel{padding:1.25rem;}.wrap{max-width:100%;}}
 
 /* 상단 */
 .top-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.25rem;flex-wrap:wrap;gap:8px;}
@@ -50,7 +52,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Apple SD Gothic Ne
 .mdot.rv{background:#E24B4A;}
 
 /* 카드 씬 */
-.scene{perspective:900px;height:210px;max-width:400px;margin:0 auto .75rem;}
+.scene{perspective:900px;height:240px;max-width:620px;margin:0 auto .75rem;}
+@media(max-width:600px){.scene{height:210px;max-width:100%;}}
 .c3d{width:100%;height:100%;position:relative;transform-style:preserve-3d;transition:transform .45s cubic-bezier(.4,0,.2,1);cursor:pointer;}
 .c3d.fl{transform:rotateY(180deg);}
 .face{
@@ -94,7 +97,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Apple SD Gothic Ne
 .ftag:hover{background:#9FE1CB;}
 
 /* 완료 박스 */
-.donebox{background:#fff;border:1px solid #e5e5e5;border-left:4px solid #1D9E75;border-radius:0 14px 14px 0;padding:2rem 1.5rem;text-align:center;max-width:400px;margin:0 auto .75rem;box-shadow:0 2px 8px rgba(0,0,0,0.05);}
+.donebox{background:#fff;border:1px solid #e5e5e5;border-left:4px solid #1D9E75;border-radius:0 14px 14px 0;padding:2rem 1.5rem;text-align:center;max-width:620px;margin:0 auto .75rem;box-shadow:0 2px 8px rgba(0,0,0,0.05);}
 .donebox.rv{border-left-color:#E24B4A;}
 .donebox.hidden{display:none;}
 .done-t{font-size:26px;font-weight:700;color:#111;margin-bottom:6px;}
@@ -102,13 +105,15 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Apple SD Gothic Ne
 .done-btns{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;}
 
 /* 네비 버튼 */
-.nav{display:flex;align-items:center;justify-content:center;gap:10px;}
+.nav{display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap;}
 .nb{font-size:13px;font-weight:600;padding:10px 26px;border-radius:999px;border:1px solid #ddd;background:#fff;color:#333;cursor:pointer;transition:all .15s;}
 .nb:hover{background:#f0f0f0;}
 .nb.kn{background:#E1F5EE;color:#085041;border-color:#5DCAA5;}
 .nb.kn:hover{background:#9FE1CB;}
 .nb.uk{background:#FCEBEB;color:#A32D2D;border-color:#fca5a5;}
 .nb.uk:hover{background:#fecaca;}
+.nb.skip{padding:10px 16px;color:#999;border-color:#eee;font-size:18px;line-height:1;}
+.nb.skip:hover{background:#f5f5f5;color:#555;}
 .ctr{font-size:13px;color:#aaa;min-width:48px;text-align:center;}
 </style>
 </head>
@@ -179,9 +184,11 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Apple SD Gothic Ne
 </div>
 
 <div class="nav" id="nav">
+  <button class="nb skip" onclick="prevCard()" title="이전">&#8592;</button>
   <button class="nb uk" onclick="answer(false)">몰라요</button>
   <span class="ctr" id="ctr"></span>
   <button class="nb kn" onclick="answer(true)">알아요</button>
+  <button class="nb skip" onclick="nextCard()" title="다음">&#8594;</button>
 </div>
 
 </div>
@@ -425,6 +432,15 @@ function updateBadge(){
 }
 function unflip(){flipped=false;document.getElementById('c3d').classList.remove('fl');}
 function flipCard(){flipped=!flipped;document.getElementById('c3d').classList.toggle('fl',flipped);}
+function prevCard(){
+  if(cur<=0)return;
+  cur--;showCard();
+}
+function nextCard(){
+  const p=getPool();
+  if(cur>=p.length-1)return;
+  cur++;showCard();
+}
 function answer(know){
   const p=getPool();if(cur>=p.length)return;
   const w=p[cur].word;
