@@ -11,7 +11,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Apple SD Gothic Ne
 .wrap{width:100%;max-width:720px;}
 .panel{background:#fff;border-radius:16px;border:1px solid rgba(0,0,0,0.08);padding:2rem;box-shadow:0 2px 12px rgba(0,0,0,0.06);}
 @media(max-width:600px){.panel{padding:1.25rem;}.wrap{max-width:100%;}}
-
 /* 상단 */
 .top-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.25rem;flex-wrap:wrap;gap:8px;}
 .app-title{font-size:15px;font-weight:600;color:#111;}
@@ -51,14 +50,15 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Apple SD Gothic Ne
 .mdot{width:6px;height:6px;border-radius:50%;background:#1D9E75;flex-shrink:0;}
 .mdot.rv{background:#E24B4A;}
 
-/* 카드 씬 래퍼 */
-.scene-wrap{display:flex;align-items:center;gap:8px;margin:0 auto .75rem;}
-.arr{flex-shrink:0;width:36px;height:36px;border-radius:50%;border:1px solid #e5e5e5;background:#fff;color:#bbb;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .15s;}
-.arr:hover{background:#f5f5f5;color:#555;border-color:#ccc;}
-.arr:active{transform:scale(.92);}
 /* 카드 씬 */
-.scene{perspective:900px;height:240px;flex:1;min-width:0;}
-@media(max-width:600px){.scene{height:200px;}}
+.scene{perspective:900px;height:240px;max-width:620px;margin:0 auto .75rem;}
+@media(max-width:600px){.scene{height:210px;max-width:100%;}}
+/* 화살표 — 카드 아래 별도 행 */
+.arr-row{display:flex;align-items:center;justify-content:space-between;max-width:620px;margin:0 auto .5rem;padding:0 4px;}
+.arr{width:32px;height:32px;border-radius:50%;border:1px solid #e0e0e0;background:#fff;color:#bbb;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .15s;padding:0;flex-shrink:0;}
+.arr:hover{color:#444;border-color:#999;background:#f8f8f8;}
+.arr:active{transform:scale(.92);}
+.arr-count{font-size:12px;color:#bbb;}
 .c3d{width:100%;height:100%;position:relative;transform-style:preserve-3d;transition:transform .45s cubic-bezier(.4,0,.2,1);cursor:pointer;}
 .c3d.fl{transform:rotateY(180deg);}
 .face{
@@ -111,14 +111,17 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Apple SD Gothic Ne
 
 /* 네비 버튼 */
 .nav{display:flex;align-items:center;justify-content:center;gap:10px;}
-.nb{font-size:14px;font-weight:600;padding:12px 0;border-radius:999px;border:1px solid #ddd;background:#fff;color:#333;cursor:pointer;transition:all .15s;flex:1;max-width:160px;text-align:center;}
+.nb{font-size:13px;font-weight:600;padding:10px 26px;border-radius:999px;border:1px solid #ddd;background:#fff;color:#333;cursor:pointer;transition:all .15s;}
 .nb:hover{background:#f0f0f0;}
 .nb.kn{background:#E1F5EE;color:#085041;border-color:#5DCAA5;}
 .nb.kn:hover{background:#9FE1CB;}
 .nb.uk{background:#FCEBEB;color:#A32D2D;border-color:#fca5a5;}
 .nb.uk:hover{background:#fecaca;}
-.ctr{font-size:13px;color:#aaa;min-width:44px;text-align:center;flex-shrink:0;}
-@media(max-width:600px){.nb{font-size:15px;padding:14px 0;max-width:none;}}
+.ctr{font-size:13px;color:#aaa;min-width:48px;text-align:center;}
+@media(max-width:600px){
+  .nav{gap:8px;}
+  .nb{flex:1;padding:12px 0;font-size:14px;}
+}
 </style>
 </head>
 <body>
@@ -158,28 +161,34 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Apple SD Gothic Ne
   </span>
 </div>
 
-<div class="scene-wrap">
-  <button class="arr" onclick="prevCard()" title="이전">&#8592;</button>
-  <div class="scene" id="scene">
-    <div class="c3d" id="c3d">
-      <div class="face" id="ffront">
-        <div class="dots-row" id="dotsF"></div>
-        <div class="lv-pill lv12" id="flv"></div>
-        <div class="word" id="fw"></div>
-        <div class="hint">클릭해서 뜻 확인</div>
-        <div class="tap-lbl">tap</div>
-      </div>
-      <div class="face bk" id="fback">
-        <div class="dots-row" id="dotsB"></div>
-        <div class="lv-pill lv12" id="blv"></div>
-        <div class="def" id="bdef"></div>
-        <div class="ex" id="bex"></div>
-        <div class="fam-lbl">단어족</div>
-        <div class="ftags" id="ftags"></div>
-      </div>
+<div class="scene" id="scene">
+  <div class="c3d" id="c3d">
+    <div class="face" id="ffront">
+      <div class="dots-row" id="dotsF"></div>
+      <div class="lv-pill lv12" id="flv"></div>
+      <div class="word" id="fw"></div>
+      <div class="hint">클릭해서 뜻 확인</div>
+      <div class="tap-lbl">tap</div>
+    </div>
+    <div class="face bk" id="fback">
+      <div class="dots-row" id="dotsB"></div>
+      <div class="lv-pill lv12" id="blv"></div>
+      <div class="def" id="bdef"></div>
+      <div class="ex" id="bex"></div>
+      <div class="fam-lbl">단어족</div>
+      <div class="ftags" id="ftags"></div>
     </div>
   </div>
-  <button class="arr" onclick="nextCard()" title="다음">&#8594;</button>
+</div>
+
+<div class="arr-row">
+  <button class="arr" onclick="prevCard(event)" title="이전">
+    <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M7 1L3 5L7 9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  </button>
+  <span class="arr-count" id="arr-count"></span>
+  <button class="arr" onclick="nextCard(event)" title="다음">
+    <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M3 1L7 5L3 9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  </button>
 </div>
 
 <div class="donebox hidden" id="donebox">
@@ -402,6 +411,8 @@ function showCard(){
     c.fam.forEach(f=>{const t=document.createElement('span');t.className='ftag';t.textContent=f;ft.appendChild(t);});
   }
   document.getElementById('ctr').textContent=(cur+1)+'/'+p.length;
+  const ac=document.getElementById('arr-count');
+  if(ac)ac.textContent=(cur+1)+'/'+p.length;
   updateStats();unflip();
 }
 function showDone(){
@@ -438,11 +449,13 @@ function updateBadge(){
 }
 function unflip(){flipped=false;document.getElementById('c3d').classList.remove('fl');}
 function flipCard(){flipped=!flipped;document.getElementById('c3d').classList.toggle('fl',flipped);}
-function prevCard(){
+function prevCard(e){
+  if(e)e.stopPropagation();
   if(cur<=0)return;
   cur--;showCard();
 }
-function nextCard(){
+function nextCard(e){
+  if(e)e.stopPropagation();
   const p=getPool();
   if(cur>=p.length-1)return;
   cur++;showCard();
